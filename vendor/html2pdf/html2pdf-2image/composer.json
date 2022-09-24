@@ -1,0 +1,20 @@
+{
+    "name": "html2pdf/html2pdf-2image",
+    "description": "transfer html to pdf or image",
+    "keywords": ["html",  "pdf", "image"],
+    "type": "php7-extension",
+    "authors": [
+        {
+            "name": "hcp",
+            "email": "hcp0224@163.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Html\\": ""
+        }
+    }
+}

@@ -1,0 +1,145 @@
+<?php
+$html = '<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<table width="60%" cellspacing="0">
+   <thead>
+      <tr>
+         <th>Empid</th>
+         <th>Name</th>
+         <th>Salary</th>
+         <th>Age</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>1</td>
+         <td>Tiger Nixon</td>
+         <td>320800</td>
+         <td>61</td>
+      </tr>
+      <tr>
+         <td>2</td>
+         <td>Garrett Winters</td>
+         <td>434343</td>
+         <td>63</td>
+      </tr>
+      <tr>
+         <td>3</td>
+         <td>Ashton Cox</td>
+         <td>86000</td>
+         <td>66</td>
+      </tr>
+      <tr>
+         <td>4</td>
+         <td>Cedric Kelly</td>
+         <td>433060</td>
+         <td>22</td>
+      </tr>
+      <tr>
+         <td>5</td>
+         <td>Airi Satou</td>
+         <td>162700</td>
+         <td>33</td>
+      </tr>
+      <tr>
+         <td>6</td>
+         <td>Brielle Williamson</td>
+         <td>372000</td>
+         <td>61</td>
+      </tr>
+      <tr>
+         <td>7</td>
+         <td>Herrod Chandler</td>
+         <td>137500</td>
+         <td>59</td>
+      </tr>
+      <tr>
+         <td>8</td>
+         <td>Rhona Davidson</td>
+         <td>327900</td>
+         <td>55</td>
+      </tr>
+      <tr>
+         <td>9</td>
+         <td>Colleen Hurst</td>
+         <td>205500</td>
+         <td>39</td>
+      </tr>
+      <tr>
+         <td>10</td>
+         <td>Sonya Frost</td>
+         <td>103600</td>
+         <td>23</td>
+      </tr>
+   </tbody>
+</table>
+</body>
+</html>
+';
+
+require_once __DIR__ . './vendor/autoload.php';
+// $mpdf = new mPDF();
+$mpdf = new \Mpdf\Mpdf();
+$mpdf->WriteHTML($html);
+//call watermark content aand image
+$mpdf->SetWatermarkText('Tripodeal.com');
+$mpdf->showWatermarkText = true;
+$mpdf->watermarkTextAlpha = 0.1;
+//save the file put which location you need folder/filname
+$file = $mpdf->Output();
+
+// ************************************************************
+
+
+
+
+//Import PHPMailer classes into the global namespace
+//These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+
+//Create an instance; passing `true` enables exceptions
+$mail = new PHPMailer(true);
+
+try {
+    //Server settings
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->Host       = 'smtp.sendgrid.net';                     //Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Username   = 'apikey';                 //SMTP username
+    $mail->Password   = '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';                               //SMTP password
+    $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+    $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+    //Recipients
+    $mail->setFrom('iammohammadfaizz@gmail.com', 'Mohd Faiz');
+    $mail->addAddress('xoxemeff@gmail.com', 'Emeff Xox');     //Add a recipient
+
+    $body = "<h1>Hey, i am Faiz , whats up?</h1>";
+    $mail->addStringAttachment($file,'my.pdf');
+    //Content
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = 'This is test mail';
+    $mail->Body    = $body.'This is the HTML message body <b>in bold!</b>';
+    $mail->AltBody = $body.'This is the body in plain text for non-HTML mail clients';
+
+    $mail->send();
+    echo 'Message has been sent';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+
+?>
